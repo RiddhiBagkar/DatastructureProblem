@@ -18,6 +18,36 @@ def insert_bst(root,value):
         return root
 
 
+def find_min(root):
+    current = root
+    while current.left is not None:
+        current = current.left
+    return current
+
+def delete_root(root, key):
+    if root is None:
+        return root
+
+    if key < root.value:
+        root.left = delete_root(root.left, key)
+    elif key > root.value:
+        root.right = delete_root(root.right, key)
+    else:
+        # Node to delete found
+        if root.left is None:
+            temp = root.right
+            root = None
+            return temp
+        elif root.right is None:
+            temp = root.left
+            root = None
+            return temp
+        temp = find_min(root.left)
+        root.value = temp.value
+        root.right = delete_root(root.right, temp.value)
+
+    return root
+
 def search_bst(root, key):
     if root is None:
         return False  # Not found
@@ -39,13 +69,6 @@ def print_tree(root, level=0):
         print('    ' * level + f'-> {root.value}')
         
         print_tree(root.left, level + 1)
-
-
-# def delete(root,key):
-#     if search_bst(root,key):
-#         return delete(root,key)
-#     else:
-#         raise ValueError("NO SUCH NODE WAS FOUND!!")
 
 
 def inorder_trave(root):
@@ -74,6 +97,22 @@ def postorder(root):
         postorder(root.right)
         
         print(root.value, end=' ')
+
+
+def bfs(root):
+    if root is None:
+        return
+
+    queue = deque()       
+    queue.append(root)    
+    while queue:          
+        node = queue.popleft()         
+        print(node.value, end=" ")     
+
+        if node.left:
+            queue.append(node.left)   
+        if node.right:
+            queue.append(node.right) 
 
 Value=[8,5,10,4,6,9,11] 
 root=None
